@@ -97,7 +97,6 @@ copy-the-source and unrelated-translation floors. Per pair, ordered by %Hard:
 The direction asymmetry is the clearest signal here, and it is coherent: every
 pair is easier *into* Hindi than out of it (`hi-en` 1% Hard against `en-hi` 14%,
 `pa-hi` 3% against `hi-pa` 23%, `kn-hi` 13% against `hi-kn` 71%), which is what
-the training-data imbalance of these models predicts. Read **Known issues 8-10**
-before treating any single pair's number as a difficulty measurement.
+the training-data imbalance of these models predicts.
 
 
