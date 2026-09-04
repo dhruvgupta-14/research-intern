@@ -64,12 +64,20 @@ the binding reference is the unrelated-translation floor at roughly 15%.
 
 | file | Easy | Medium | Hard |
 |---|---|---|---|
-| SHORT_ANSWER | 56 | 36 | 108 |
+| SHORT_ANSWER | 56 | 36 | 203 |
 | TRANSLATION | 310 | 567 | 1021 |
 
-Per source, the gradient is even and plausible — Itihasa 62% Hard, then
-Santham 52% / 51%, Sanskrit-Interlingua 50% on both pairs. No split is
-saturated.
+`SHORT_ANSWER` splits very unevenly by source, and the file-level row hides it:
+
+| split | n | Easy | Medium | Hard |
+|---|---|---|---|---|
+| Gurukul (NCERT, judged) | 200 | 56 | 36 | 108 |
+| Temples-Ancient-Architecture (heritage, exact match) | 95 | 0 | 0 | **95** |
+
+Per source, the translation gradient is even and plausible — Itihasa 62% Hard,
+then Santham 52% / 51%, Sanskrit-Interlingua 50% on both pairs. No translation
+split is saturated. The heritage short-answer split, however, is - see Known
+issue 2.
 
 ## Known issues
 
@@ -82,7 +90,16 @@ saturated.
    - 1623 maths/science plus 438 physics and chemistry - are in
    `ncert_qa_removed_rows.jsonl`, and the full 3000-row file is kept as
    `ncert_qa.jsonl.bak`.
-2. **The two Santham splits are not independent.** They are two views of the
+2. **The Odia heritage split is 95/95 Hard and carries no signal.** It is
+   scored on exact match against a cloze gold, so a model that produces the
+   right fact in a different surface form is marked wrong; not one of the 95
+   rows was solved by all three models. This is the same class of failure as
+   Code-Mixed's `POS_TAGGED` — the metric and the output format, not the
+   questions. The 200 Gurukul rows in the same file are judge-scored and do
+   show a gradient, so **filter on `source` before using
+   `SHORT_ANSWER.jsonl`**; the file-level 56/36/203 is a blend of two scales.
+
+3. **The two Santham splits are not independent.** They are two views of the
    same corpus - `parallel` is the verse, `anvaya` the prose-reordered form of
    the same verse - so they share Tamil targets while the Sanskrit sources
    differ. 433 targets overlap across the full files; in the labelled sample

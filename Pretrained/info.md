@@ -15,7 +15,7 @@ Pretrained/
 │   ├── bhasha_wiki_ta.jsonl           500 rows   Tamil Wikipedia
 │   ├── bodo_monolingual.jsonl         414 rows   raw Bodo text
 │   └── Deliberative_Alignment.jsonl   500 rows   adversarial prompts + responses
-├── Difficulty Labelled Data/
+├── Difficulty Label Datasets/
 │   └── MCQ.jsonl                      500 rows   from bhashawiki_domain
 └── Scripts/
     └── domain_difficulty.ipynb

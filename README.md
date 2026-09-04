@@ -26,7 +26,7 @@ assigned a difficulty label, the notebooks that produced them, and an
 ```
 <Category>/
 ├── Original Datasets/            the source data as ingested
-├── Difficulty Labelled Data/     rows with Easy / Medium / Hard assigned
+├── Difficulty Label Datasets/    rows with Easy / Medium / Hard assigned
 ├── Scripts/                      the notebooks that assigned them
 └── info.md                       decisions, caveats, known issues
 ```
@@ -51,18 +51,27 @@ per-pair floor; generation and open QA are graded by an independent judge model.
 
 Current totals, by task type:
 
-| task | Easy | Medium | Hard |
-|---|---|---|---|
-| MCQ | 1117 | 1263 | 2285 |
-| TRANSLATION | 419 | 730 | 1449 |
-| GENERATIVE | 382 | 486 | 732 |
-| SHORT_ANSWER | 158 | 181 | 356 |
-| POS_TAGGING | 0 | 0 | 200 |
+| task | Easy | Medium | Hard | total |
+|---|---|---|---|---|
+| MCQ | 1394 | 1317 | 2454 | 5165 |
+| TRANSLATION | 936 | 1837 | 2672 | 5445 |
+| GENERATIVE | 477 | 623 | 900 | 2000 |
+| SHORT_ANSWER | 158 | 181 | 356 | 695 |
+| POS_TAGGING | 0 | 0 | 200 | 200 |
+| **total** | **2965** | **3958** | **6582** | **13505** |
 
 **Read each category's `info.md` before using its labels.** Several splits are
 saturated or measure something other than difficulty — `POS_TAGGING` above is
-200/200 Hard because of an output-format failure, not because the task is hard.
-Those caveats are written down where the data lives.
+200/200 Hard because of an output-format failure, not because the task is hard;
+Code-Mixed's HinGE split scores below its own copy-the-source baseline;
+MULTILINGUAL's `en-mni` and Cultural's Odia heritage split are 100% Hard; and
+the Easy/Medium boundary on the 2847 CORIL translation rows is set almost
+entirely by one weak judge of the three. Those caveats are written down where
+the data lives.
+
+`TRANSLATION` is the largest task type as of 4 September 2026, when the CORIL
+and English-Manipuri runs finished and merged 2847 rows across 19 directed
+pairs into `MULTILINGUAL/Difficulty Label Datasets/TRANSLATION.jsonl`.
 
 ---
 
@@ -76,7 +85,7 @@ Nothing is stored in a database and nothing is editable through the UI —
 adding a dataset means committing a file, and updating the notes means editing
 an `info.md`.
 
-Statistics come **only** from `Difficulty Labelled Data/`. Row counts, coverage
+Statistics come **only** from `Difficulty Label Datasets/`. Row counts, coverage
 percentages and any difficulty column that shipped inside a source file are
 deliberately not shown, so nothing on the dashboard can be mistaken for a
 figure we did not measure.

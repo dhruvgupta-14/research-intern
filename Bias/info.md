@@ -7,9 +7,9 @@ promotional content.
 
 ```
 Bias/
-├── Original Dataset/
+├── Original Datasets/
 │   └── poliwam.jsonl              2000 rows, difficulty = null
-├── Difficulty Label Dataset/
+├── Difficulty Label Datasets/
 │   └── MCQ.jsonl                   200 rows, difficulty filled
 └── Scripts/
     └── poliwam_difficulty.ipynb    scoring notebook
