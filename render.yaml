@@ -1,0 +1,49 @@
+# Render Blueprint for the dashboard API.
+#
+# Optional: only read when you create the service via "New > Blueprint". If
+# you create the Web Service by hand, use the same settings from the
+# dashboard - this file then serves as the record of how it is configured,
+# which is otherwise nowhere in the repo.
+#
+# The whole repository is cloned even though rootDir points at the backend,
+# which is what makes the corpus available on disk at runtime. That is why
+# the backend and the corpus live in one repository.
+
+services:
+  - type: web
+    name: benchmark-backend
+    runtime: node
+    plan: free
+    rootDir: benchmark-backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+
+      # Secrets - set these in the Render dashboard, not here.
+      - key: JWT_SECRET
+        sync: false
+      - key: USER1_NAME
+        sync: false
+      - key: USER1_PASS
+        sync: false
+      - key: USER2_NAME
+        sync: false
+      - key: USER2_PASS
+        sync: false
+
+      # The Vercel production URL, comma-separated if you want more than one.
+      # Set after the frontend is deployed, then redeploy this service.
+      - key: FRONTEND_ORIGIN
+        sync: false
+
+      - key: JWT_EXPIRES_IN
+        value: 8h
+      - key: GITHUB_OWNER
+        sync: false
+      - key: GITHUB_REPO
+        value: research_intern
+      - key: GITHUB_BRANCH
+        value: main
