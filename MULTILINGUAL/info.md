@@ -22,7 +22,8 @@ MULTILINGUAL/
 │   └── trivia_qa_indic.jsonl          1100      general-knowledge MCQ
 ├── Difficulty Label Datasets/
 │   ├── MCQ.jsonl                      2465      5 sources merged
-│   ├── GENERATIVE.jsonl               1600      AIKosh crosslingual
+│   ├── GENERATIVE.jsonl               2000      AIKosh crosslingual + IndicQA abstractive
+│   ├── SHORT_ANSWER.jsonl              400      IndicQA extractive
 │   └── TRANSLATION.jsonl               200      COMTAIL only
 └── Scripts/
     ├── mcq_difficulty.ipynb                     registry of 5 MCQ datasets
@@ -41,7 +42,8 @@ floor; generation uses an LLM judge.
 | file | Easy | Medium | Hard |
 |---|---|---|---|
 | MCQ | 513 | 710 | 1242 |
-| GENERATIVE | 382 | 486 | 732 |
+| GENERATIVE | 477 | 623 | 900 |
+| SHORT_ANSWER | 102 | 145 | 153 |
 | TRANSLATION | 27 | 87 | 86 |
 
 Per source, the gradient is coherent — the harder the task, the more Hard:
@@ -66,23 +68,28 @@ Per source, the gradient is coherent — the harder the task, the more Hard:
    `moral_scenarios` subset collapsing in Kannada and Tamil translation). The
    removed rows are kept in `indic_arc_removed_rows.json` and
    `mmlu_indic_removed_rows.json`.
-2. **`GENERATIVE.jsonl`'s difficulty was not produced by the 3-model vote.**
-   Its 1600 labels are AIKosh's own difficulty column, collapsed from five
-   levels to three (`very hard`+`hard` -> Hard, `medium` -> Medium,
-   `easy`+`very easy` -> Easy) and capitalised — which is why there is no
-   notebook for this split. `crosslingual.jsonl` has since been normalised to
+2. **1600 of `GENERATIVE.jsonl`'s 2000 labels were not produced by the
+   3-model vote.** The file holds two splits on two different scales. The 400
+   `abstractive_qa` rows are judge-measured like the rest of the corpus; the
+   1600 AIKosh crosslingual rows are the vendor's own difficulty column,
+   collapsed from five levels to three (`very hard`+`hard` -> Hard, `medium`
+   -> Medium, `easy`+`very easy` -> Easy) and capitalised — which is why there
+   is no notebook for this split. `crosslingual.jsonl` has since been normalised to
    `difficulty: null` and `eval_metric: llm_as_a_judge` like every other
    original, so the folder is internally consistent, but that also means the
    vendor scale no longer survives anywhere on disk and these labels cannot be
-   re-derived. `eval_metric` declares how the split should be evaluated; no
-   judge has been run against it. The 400 rows dropped from the 2000-row
-   source are the English ones, leaving 10 Indic languages.
+   re-derived. `eval_metric` declares how the crosslingual split should be
+   evaluated; no judge has been run against it. The 400 rows dropped from the
+   2000-row source are the English ones, leaving 10 Indic languages.
+
+   Filter on `subcategory == "abstractive_qa"` to separate the measured rows
+   from the vendor-supplied ones.
 
    This is the opposite of the choice made in LEGAL, where BhashaBench's own
    difficulty column was replaced by measured labels (the two agreed on 36% of
-   rows). `Difficulty Label Datasets/` therefore mixes two scales: 2665
-   model-measured rows in `MCQ.jsonl` and `TRANSLATION.jsonl`, and 1600
-   vendor-supplied rows here.
+   rows). `Difficulty Label Datasets/` therefore mixes two scales: 3465
+   model-measured rows (`MCQ.jsonl`, `TRANSLATION.jsonl`, `SHORT_ANSWER.jsonl`
+   and the 400 abstractive rows here), and 1600 vendor-supplied rows.
 
 3. **trivia-qa has the worst position bias in the corpus — 53 points.**
 
@@ -98,15 +105,16 @@ Per source, the gradient is coherent — the harder the task, the more Hard:
    more mildly. None of the three notebooks shuffles option order, so part of
    the Easy class records the models' default letter rather than item
    difficulty. The fix is cyclic option permutation and a re-run.
-4. **`GENERATIVE.jsonl` is a Romanised-output task, not a native-script one.**
-   The prompts ask for "Romanised Oriya", "Romanised Tamil" and so on;
+4. **The crosslingual half of `GENERATIVE.jsonl` is a Romanised-output task,
+   not a native-script one.** The prompts ask for "Romanised Oriya", "Romanised Tamil" and so on;
    answers are a median 77% Latin characters and 502 of 1600 are at least 95%
    Latin. Combined with subcategories like `Coding & Debugging` (266 rows) and
    `Math` (315), this sits closer to CODE_MIXED than to MULTILINGUAL. Worth a
    deliberate decision rather than leaving it by default.
-5. **`GENERATIVE.jsonl` uses display-name languages** (`Oriya`, `Gujarati`,
-   `Hindi`) where every other file here uses ISO codes (`or`, `gu`, `hi`). Its
-   `subcategory` is also untidy: 26 distinct values including 11 singletons
+5. **The crosslingual rows use display-name languages** (`Oriya`,
+   `Gujarati`, `Hindi`) where every other file here — including the 400
+   abstractive rows in the same file — uses ISO codes (`or`, `gu`, `hi`).
+   Their `subcategory` is also untidy: 26 distinct values including 11 singletons
    such as `Genomic and Epigenetic Research`, 3 nulls, and both `Role playing`
    and `Role_playing`.
 6. **`MCQ.jsonl` mixes three answer forms.** 1491 rows have a letter gold with
@@ -115,7 +123,9 @@ Per source, the gradient is coherent — the harder the task, the more Hard:
    `language: "multi"`. `mcq_difficulty.ipynb` resolves all of them, but any
    consumer that assumes a letter gold will break.
 7. **`TRANSLATION.jsonl` holds COMTAIL alone so far.** The 18 CORIL files
-   (8994 rows), `english_manipuri.jsonl` (500) and both IndicQA files (2000)
-   are **currently being scored on Kaggle**; their labels will merge into
-   `TRANSLATION.jsonl` and a new `SHORT_ANSWER.jsonl` / `GENERATIVE.jsonl`
-   when those runs finish. Until then the row counts above are partial.
+   (8994 rows) and `english_manipuri.jsonl` (500) are **currently being scored
+   on Kaggle**; their labels will merge into `TRANSLATION.jsonl` when those
+   runs finish, so that row count is still partial. Both IndicQA files have
+   finished: 400 of the 1100 extractive rows are in `SHORT_ANSWER.jsonl` and
+   400 of the 900 abstractive rows are in `GENERATIVE.jsonl`, leaving 1200
+   IndicQA rows unscored.

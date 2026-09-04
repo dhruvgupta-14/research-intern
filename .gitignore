@@ -1,36 +1,36 @@
-# ── secrets ───────────────────────────────────────────────────────────
-# Real values live in the Render / Vercel dashboards, never in the repo.
+
 .env
 .env.*
 !.env.example
 
-# Seeded from USER*_NAME / USER*_PASS at boot, so it is never committed.
+
 benchmark-backend/data/users.json
 
-# ── dependencies & build output ───────────────────────────────────────
+───────────────────────────────────────
 node_modules/
 dist/
 dist-ssr/
 *.local
 
-# ── corpus working files ──────────────────────────────────────────────
-# Backups and scratch output left beside the data by cleanup scripts.
-# The datasets themselves ARE committed - they are the source of truth.
 *.bak
 *.tmp
 
-# Per-run scoring artifacts written next to the notebooks.
+
 *_audit.jsonl
 gen_progress*/
 judge_progress*/
 mcq_progress/
 
-# ── notebooks & python ────────────────────────────────────────────────
+────────────────────────────────────────────────
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
 
-# ── local scratch ─────────────────────────────────────────────────────
+───────────────────────────────────────────────────
+
+report/
+
+─────────────────────────────────────────────────
 tok.txt
 *.log
 logs/
