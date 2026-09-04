@@ -5,18 +5,23 @@
 # dashboard - this file then serves as the record of how it is configured,
 # which is otherwise nowhere in the repo.
 #
-# The whole repository is cloned even though rootDir points at the backend,
-# which is what makes the corpus available on disk at runtime. That is why
-# the backend and the corpus live in one repository.
+# Root Directory is deliberately NOT set. Render's rootDir changes where
+# commands run AND narrows auto-deploy to that folder - so with
+# rootDir: benchmark-backend, pushing new labelled data under MULTILINGUAL/
+# would not redeploy, and the dashboard would keep serving stale numbers.
+# Running from the repo root instead means every push redeploys, which is
+# what we want: the corpus is the thing that changes.
+#
+# CORPUS_ROOT still resolves correctly either way - the backend derives it
+# from __dirname, not from the working directory.
 
 services:
   - type: web
     name: benchmark-backend
     runtime: node
     plan: free
-    rootDir: benchmark-backend
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: cd benchmark-backend && npm install
+    startCommand: cd benchmark-backend && npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
@@ -44,6 +49,6 @@ services:
       - key: GITHUB_OWNER
         sync: false
       - key: GITHUB_REPO
-        value: research_intern
+        value: research-intern
       - key: GITHUB_BRANCH
         value: main
