@@ -55,10 +55,6 @@ Result: **Easy 553 · Medium 495 · Hard 952**.
 The ordering is coherent: finance harder than law, Hindi harder than English
 in both domains.
 
-**Position bias is absent here**, unlike the multilingual MCQ files:
 
-| gold | A | B | C | D |
-|---|---|---|---|---|
-| % Easy | 26.7 | 31.1 | 27.2 | 25.6 |
 
 

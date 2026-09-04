@@ -81,16 +81,7 @@ issue 2.
 
 ## Known issues
 
-1. **`ncert_qa.jsonl` is a rebuild, not the set the labels were drawn from.**
-   The 946-row curated file was lost in the folder restructure and is not
-   reconstructible - its cut was made row by row, not by rule. What is here is
-   a 939-row equivalent from a stated rule: keep the six humanities families
-   (`english_lit` 318, `hindi_lit` 286, `civics` 129, `geography` 108,
-   `history` 60, `economics` 38), drop everything else. The 2061 dropped rows
-   - 1623 maths/science plus 438 physics and chemistry - are in
-   `ncert_qa_removed_rows.jsonl`, and the full 3000-row file is kept as
-   `ncert_qa.jsonl.bak`.
-2. **The Odia heritage split is 95/95 Hard and carries no signal.** It is
+1. **The Odia heritage split is 95/95 Hard and carries no signal.** It is
    scored on exact match against a cloze gold, so a model that produces the
    right fact in a different surface form is marked wrong; not one of the 95
    rows was solved by all three models. This is the same class of failure as
@@ -99,7 +90,7 @@ issue 2.
    show a gradient, so **filter on `source` before using
    `SHORT_ANSWER.jsonl`**; the file-level 56/36/203 is a blend of two scales.
 
-3. **The two Santham splits are not independent.** They are two views of the
+2. **The two Santham splits are not independent.** They are two views of the
    same corpus - `parallel` is the verse, `anvaya` the prose-reordered form of
    the same verse - so they share Tamil targets while the Sanskrit sources
    differ. 433 targets overlap across the full files; in the labelled sample

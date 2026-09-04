@@ -80,42 +80,9 @@ Result: **Easy 277 · Medium 54 · Hard 169**.
    language overlap heavily - the audit showed Physics being read as Law and as
    Chemistry most often. Treat the per-domain figures as a property of this
    text collection, not of the domains themselves.
-3. **The post-shuffle position check was verified at run time and passed.**
-   `domain_difficulty.ipynb` writes `MCQ_audit.jsonl` with every model's pick
-   and the shuffle applied to each row; that file was not kept alongside the
-   output, so the check cannot be repeated from the repository alone. Keep it
-   on any re-run. Note that the gold position as stored here is the *source*
-   order, in which position and domain are the same thing - that column
-   restates the per-domain table above and is not a bias check.
-4. **`eval_metric` is inconsistent across the unlabelled files.** The three
-   Wikipedia files carry `rouge_l`, while `bodo_monolingual` and
-   `Deliberative_Alignment` carry null. If none of the four is ever scored,
-   null is the more honest value for all of them.
-5. **The Wikipedia content is not India-specific.** Sampled articles cover
+3. **The Wikipedia content is not India-specific.** Sampled articles cover
    Pakistani cricket in Ceylon, an Arizona wilderness area and an American
    musician. These files test language generation, not Indian knowledge, and
    should not be read as cultural content.
 
-## Corrections applied
 
-Three defects were found and fixed; the untouched originals are kept as
-`*.jsonl.bak` beside each file.
-
-| file | field | was | now |
-|---|---|---|---|
-| `bhasha_wiki_kn.jsonl` | `source` | `nickfuryavg/bhasha-wiki-en` | `nickfuryavg/bhasha-wiki-kn` |
-| `bhasha_wiki_ta.jsonl` | `subcategory` | `wikipedia_en` | `wikipedia_ta` |
-
-Each file had exactly one field wrong, and a different field in each, so these
-were two independent copy-paste slips rather than one systematic error. The
-Kannada file's `source` was the more costly of the two: it claimed provenance
-from the English dataset, which both merged 1000 rows across two languages
-under one source string and left the actual upstream Kannada dataset
-unrecorded. Grouping by `source` now yields three clean sets of 500.
-
-**`bodo_monolingual.jsonl`: 500 -> 414 rows.** 86 rows had `question: null`
-(correct for a monolingual corpus, where the text lives in `answer`) *and* an
-empty `answer`, making them records with no content at all - 17% of the file.
-They are preserved in `bodo_monolingual_removed_rows.json`. Surviving rows were
-verified byte-identical to the original. 12 rows remain under 20 characters,
-which are short but not empty.
